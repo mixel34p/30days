@@ -15,36 +15,36 @@ const SUPABASE_ANON_KEY = window.ENV_SUPABASE_ANON_KEY || '';
 const CHALLENGE_START = new Date('2026-06-22T00:00:00');
 
 const DAY_DATA = [
-  { day: 1,  type: 'game',      title: 'EL PRINCIPIO',       prompt: '¿Cuál fue el primer videojuego que jugaste en tu vida?' },
-  { day: 2,  type: 'game',      title: 'EL CLÁSICO',         prompt: '¿Cuál es tu videojuego clásico (retro) favorito de todos los tiempos?' },
-  { day: 3,  type: 'game',      title: 'EL MÁS JUGADO',      prompt: '¿En qué videojuego has invertido más horas?' },
-  { day: 4,  type: 'game',      title: 'LA OBRA MAESTRA',    prompt: '¿Cuál consideras que es el mejor videojuego jamás creado?' },
-  { day: 5,  type: 'game',      title: 'BANDA SONORA',       prompt: '¿Qué videojuego tiene la mejor música / banda sonora?' },
-  { day: 6,  type: 'game',      title: 'HISTORIA ÉPICA',     prompt: '¿Qué videojuego tiene la mejor historia / narrativa?' },
-  { day: 7,  type: 'game',      title: 'MULTIJUGADOR',       prompt: '¿Cuál es tu mejor experiencia multijugador (co-op o competitivo)?' },
-  { day: 8,  type: 'character', title: 'HÉROE FAVORITO',     prompt: '¿Cuál es tu personaje protagonista favorito de videojuegos?' },
-  { day: 9,  type: 'character', title: 'VILLANO ÉPICO',      prompt: '¿Cuál es el villano más memorable para ti?' },
-  { day: 10, type: 'game',      title: 'TERROR Y SUSPENSO',  prompt: '¿Cuál es el videojuego de terror que más te ha asustado o impresionado?' },
-  { day: 11, type: 'game',      title: 'MUNDO ABIERTO',      prompt: '¿En qué mundo abierto te perderías para siempre?' },
-  { day: 12, type: 'character', title: 'DISEÑO VISUAL',      prompt: '¿Qué personaje tiene el diseño visual más impresionante para ti?' },
-  { day: 13, type: 'text',      title: 'RECUERDO DE INFANCIA', prompt: 'Comparte un recuerdo especial de cuando eras niño/a jugando videojuegos.' },
-  { day: 14, type: 'character', title: 'COMPAÑERO DE VIAJE', prompt: '¿Qué personaje secundario o compañero de aventuras es tu favorito?' },
-  { day: 15, type: 'game',      title: 'PLATAFORMAS',        prompt: '¿Cuál es tu juego de plataformas favorito?' },
-  { day: 16, type: 'game',      title: 'RPG INOLVIDABLE',    prompt: '¿Cuál es el RPG que más recuerdas o que más te ha marcado?' },
-  { day: 17, type: 'game',      title: 'JUEGO INDIE',        prompt: '¿Cuál es el juego independiente (indie) que más te ha sorprendido?' },
-  { day: 18, type: 'game',      title: 'FRUSTRACIÓN MÁXIMA', prompt: '¿Cuál es el videojuego que más veces te ha hecho querer tirar el mando?' },
-  { day: 19, type: 'game',      title: 'ARTE Y DISEÑO',      prompt: '¿Qué videojuego tiene el apartado artístico / visual más increíble?' },
-  { day: 20, type: 'game',      title: 'DEPORTE & CARRERAS', prompt: '¿Cuál es tu juego de deportes o de carreras favorito?' },
-  { day: 21, type: 'game',      title: 'SIN TERMINAR',       prompt: '¿Cuál es el videojuego que tienes pendiente de terminar desde hace tiempo?' },
-  { day: 22, type: 'text',      title: 'LOS VIDEOJUEGOS Y YO', prompt: '¿Qué significan los videojuegos en tu vida? Cuéntanos tu relación con este hobby.' },
-  { day: 23, type: 'game',      title: 'SAGA FAVORITA',      prompt: '¿Cuál es tu saga / franquicia de videojuegos favorita? Elige un título representativo.' },
-  { day: 24, type: 'game',      title: 'JOYA OCULTA',        prompt: '¿Cuál es ese videojuego infravalorado que todos deberían jugar?' },
-  { day: 25, type: 'character', title: 'PAREJA DINÁMICA',    prompt: '¿Cuál es el mejor dúo o pareja de personajes de videojuego?' },
-  { day: 26, type: 'game',      title: 'JUEGO EN CURSO',     prompt: '¿A qué videojuego estás jugando ahora mismo?' },
-  { day: 27, type: 'character', title: 'RIVALIDAD ÉPICA',    prompt: '¿Cuál es la rivalidad entre personajes que más te ha emocionado?' },
-  { day: 28, type: 'game',      title: 'FINAL PERFECTO',     prompt: '¿Qué videojuego tiene el final (ending) más impactante o emocionante?' },
-  { day: 29, type: 'text',      title: 'CARTA AL GAMING',    prompt: 'Escribe una carta corta al mundo de los videojuegos. ¿Qué le dirías?' },
-  { day: 30, type: 'game',      title: 'EL ELEGIDO',         prompt: 'Si solo pudieras quedarte con UN videojuego para el resto de tu vida, ¿cuál sería?' },
+  { day: 1,  type: 'game',      title: 'PRIMER VIDEOJUEGO',   prompt: 'Tu primer videojuego' },
+  { day: 2,  type: 'game',      title: 'MÁS HORAS',           prompt: 'El juego en el que más horas tienes' },
+  { day: 3,  type: 'game',      title: 'BOSS MÁS DIFÍCIL',    prompt: 'El boss más difícil al que te has enfrentado' },
+  { day: 4,  type: 'game',      title: 'JUGANDO AHORA',       prompt: 'Lo que estás jugando ahora mismo' },
+  { day: 5,  type: 'game',      title: 'MERECE REMAKE',       prompt: 'Un juego que merece un remake' },
+  { day: 6,  type: 'game',      title: 'MEJOR WORLDBUILDING', prompt: 'El mejor worldbuilding' },
+  { day: 7,  type: 'game',      title: 'MULTIJUGADOR/MMO',    prompt: 'Tu multijugador o MMO favorito' },
+  { day: 8,  type: 'character', title: 'PROTAGONISTA FAVORITO', prompt: 'Tu protagonista favorito' },
+  { day: 9,  type: 'character', title: 'ANTAGONISTA FAVORITO', prompt: 'Tu antagonista favorito' },
+  { day: 10, type: 'game',      title: 'INFRAVALORADO',       prompt: 'Un juego infravalorado' },
+  { day: 11, type: 'game',      title: 'COMFORT GAME',        prompt: 'Tu juego de cabecera (comfort game)' },
+  { day: 12, type: 'character', title: 'MÁS IRRITANTE',       prompt: 'El personaje más irritante' },
+  { day: 13, type: 'character', title: 'MEJOR DOBLAJE',       prompt: 'El mejor doblaje o actuación de voz' },
+  { day: 14, type: 'character', title: 'CLASE FAVORITA',      prompt: 'Tu clase o estilo de combate favorito' },
+  { day: 15, type: 'game',      title: 'SOBREVALORADO',       prompt: 'Un juego sobrevalorado' },
+  { day: 16, type: 'game',      title: 'GIRO DE GUIÓN',       prompt: 'El mejor giro de guión' },
+  { day: 17, type: 'game',      title: 'CINEMÁTICA FAVORITA', prompt: 'Tu cinemática favorita' },
+  { day: 18, type: 'game',      title: 'PEOR MINIJUEGO',      prompt: 'El peor minijuego' },
+  { day: 19, type: 'game',      title: 'MECÁNICA FAVORITA',   prompt: 'Tu mecánica de juego favorita' },
+  { day: 20, type: 'game',      title: 'BOSS MÁS FÁCIL',      prompt: 'El boss final más fácil' },
+  { day: 21, type: 'game',      title: 'PERSONALIZACIÓN',     prompt: 'La mejor personalización de personaje' },
+  { day: 22, type: 'game',      title: 'FRASE FAVORITA',      prompt: 'Tu frase favorita dentro de un juego' },
+  { day: 23, type: 'game',      title: 'PRIMERA RESERVA',     prompt: 'Tu primer reserva de juego' },
+  { day: 24, type: 'game',      title: 'MEJOR BANDA SONORA',  prompt: 'La mejor banda sonora' },
+  { day: 25, type: 'character', title: 'SECUNDARIO FAVORITO', prompt: 'Tu personaje secundario favorito' },
+  { day: 26, type: 'game',      title: 'SAGA FAVORITA',       prompt: 'Tu saga favorita' },
+  { day: 27, type: 'character', title: 'ESPECIE EXCLUSIVA',   prompt: 'Tu especie exclusiva de saga favorita' },
+  { day: 28, type: 'text',      title: 'GÉNERO FAVORITO',     prompt: 'Tu género favorito' },
+  { day: 29, type: 'game',      title: 'MÁS ANTICIPADO',      prompt: 'El juego que más estás anticipando' },
+  { day: 30, type: 'game',      title: 'FAVORITO DE SIEMPRE', prompt: 'Tu juego favorito de todos los tiempos (por consola)' },
 ];
 
 // ─── State ───────────────────────────────────────────────────────
@@ -413,7 +413,7 @@ function buildGameForm(container, existing) {
       <button class="pixel-btn btn-blue btn-sm" onclick="triggerGameSearch()">BUSCAR</button>
     </div>
     <div id="game-search-results" class="search-results"></div>
-    <label class="form-label mt-16">✏️ AÑADE TU COMENTARIO (OPCIONAL)</label>
+    <label class="form-label mt-16">✏️ AÑADE TU COMENTARIO (OBLIGATORIO)</label>
     <textarea id="dm-text" class="pixel-textarea" placeholder="¿Por qué elegiste este juego? Cuéntanos más..." rows="3"></textarea>
   `;
 
@@ -439,7 +439,7 @@ function buildCharacterForm(container, existing) {
     <div class="or-divider">— o escríbelo manualmente —</div>
     <label class="form-label">✏️ NOMBRE PERSONALIZADO</label>
     <input id="dm-char-custom" class="pixel-input purple-input" type="text" placeholder="Nombre del personaje..." autocomplete="off">
-    <label class="form-label mt-16">✏️ AÑADE TU COMENTARIO (OPCIONAL)</label>
+    <label class="form-label mt-16">✏️ AÑADE TU COMENTARIO (OBLIGATORIO)</label>
     <textarea id="dm-text" class="pixel-textarea" placeholder="¿Por qué este personaje? Cuéntanos..." rows="3"></textarea>
   `;
 
@@ -636,6 +636,11 @@ async function saveDayResponse() {
   const textEl = document.getElementById('dm-text');
   const textResponse = textEl ? textEl.value.trim() : '';
 
+  if (!textResponse) {
+    showToast('Añade un comentario (obligatorio) ✏️', 'error');
+    return;
+  }
+
   let responseData = {};
 
   if (dayInfo.type === 'game') {
@@ -663,10 +668,6 @@ async function saveDayResponse() {
       textResponse,
     };
   } else {
-    if (!textResponse) {
-      showToast('Escribe tu respuesta primero ✏️', 'error');
-      return;
-    }
     responseData = { textResponse };
   }
 
