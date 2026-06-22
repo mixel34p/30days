@@ -58,7 +58,7 @@ let state = {
 };
 
 // ─── Supabase client ─────────────────────────────────────────────
-let supabase = null;
+let supabaseClient = null;
 
 function initSupabase() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
@@ -66,7 +66,7 @@ function initSupabase() {
     return;
   }
   try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   } catch (e) {
     console.error('Supabase init error:', e);
   }
@@ -104,14 +104,14 @@ function saveToStorage() {
 
 // ─── Supabase DB helpers ──────────────────────────────────────────
 async function ensureUser(nickname) {
-  if (!supabase) return;
+  if (!supabaseClient) return;
   try {
-    await supabase.from('users').upsert({ nickname }, { onConflict: 'nickname', ignoreDuplicates: true });
+    await supabaseClient.from('users').upsert({ nickname }, { onConflict: 'nickname', ignoreDuplicates: true });
   } catch (e) { console.error('ensureUser:', e); }
 }
 
 async function saveResponse(dayNumber, data) {
-  if (!supabase) return;
+  if (!supabaseClient) return;
   try {
     const payload = {
       user_nickname: state.nickname,
@@ -122,16 +122,16 @@ async function saveResponse(dayNumber, data) {
       character_name: data.characterName || null,
       text_response: data.textResponse || null,
     };
-    await supabase.from('responses').upsert(payload, {
+    await supabaseClient.from('responses').upsert(payload, {
       onConflict: 'user_nickname,day_number',
     });
   } catch (e) { console.error('saveResponse:', e); }
 }
 
 async function loadAllResponses() {
-  if (!supabase) return [];
+  if (!supabaseClient) return [];
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('responses')
       .select('*')
       .order('day_number', { ascending: true })
