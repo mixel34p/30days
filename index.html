@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>30 Días de Videojuegos — El Reto Gamer</title>
+  <meta name="description" content="Únete al reto de 30 días de videojuegos. Comparte tus juegos favoritos, personajes épicos y recuerdos con la comunidad gamer.">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta property="og:title" content="30 Días de Videojuegos">
+  <meta property="og:description" content="El reto gamer definitivo: 30 preguntas, 30 días, 30 respuestas sobre videojuegos.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- Env injection (Vercel injects these via _next/static or rewrites; fallback: set in window) -->
+  <!-- If not using Vercel edge config, replace the empty strings below with your public values -->
+  <script>
+    window.ENV_SUPABASE_URL      = '';  // e.g. 'https://xxxx.supabase.co'
+    window.ENV_SUPABASE_ANON_KEY = '';  // your public anon key
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ─── Decorative pixel stars background ─── -->
+  <div class="pixel-stars" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- NICKNAME MODAL (blocks UI on first visit)                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="nickname-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="nick-modal-title">
+    <div class="modal-box">
+      <div class="modal-title-bar">
+        <h2 id="nick-modal-title" class="modal-title">⚡ BIENVENIDO/A AL RETO</h2>
+      </div>
+      <div class="modal-body">
+
+        <!-- Pixel art banner -->
+        <pre class="logo-sprite" aria-hidden="true">
+ ██████╗  ██████╗     ██████╗ ██╗ █████╗ ███████╗
+ ╚════██╗██╔═══██╗    ██╔══██╗██║██╔══██╗██╔════╝
+  █████╔╝██║   ██║    ██║  ██║██║███████║███████╗
+  ╚═══██╗██║   ██║    ██║  ██║██║██╔══██║╚════██║
+ ██████╔╝╚██████╔╝    ██████╔╝██║██║  ██║███████║
+ ╚═════╝  ╚═════╝     ╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝</pre>
+
+        <p class="nickname-intro">
+          Antes de empezar tu aventura, elige tu nickname de jugador.<br>
+          Este nombre aparecerá en el muro comunitario.
+        </p>
+
+        <label class="form-label green" for="nickname-input">▶ TU NICKNAME</label>
+        <input
+          id="nickname-input"
+          class="pixel-input"
+          type="text"
+          placeholder="PLAYER_ONE"
+          maxlength="20"
+          autocomplete="off"
+          autocapitalize="characters"
+          aria-required="true"
+        >
+
+        <button id="nickname-submit" class="pixel-btn btn-green btn-full mt-24" aria-label="Empezar el reto">
+          ▶ EMPEZAR RETO
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- DAY RESPONSE MODAL                                         -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="day-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="dm-title">
+    <div class="modal-box" style="max-width:620px;">
+      <div class="modal-title-bar">
+        <div>
+          <div id="dm-day" class="day-modal-day"></div>
+          <h2 id="dm-title" class="modal-title"></h2>
+        </div>
+        <button class="modal-close" id="dm-close" aria-label="Cerrar modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="dm-prompt" class="day-modal-prompt"></div>
+
+        <!-- Dynamic form injected by JS -->
+        <div id="dm-form"></div>
+
+        <div class="flex gap-8 mt-24" style="justify-content:flex-end;">
+          <button class="pixel-btn btn-primary" id="dm-save" aria-label="Guardar respuesta">
+            💾 GUARDAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CELEBRATION OVERLAY                                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="celebration-overlay" role="dialog" aria-modal="true" aria-label="¡Reto completado!">
+    <div class="celebration-title">
+      ★ ¡FELICIDADES! ★<br>
+      HAS COMPLETADO LOS<br>
+      30 DÍAS DE VIDEOJUEGOS
+    </div>
+    <pre class="celebration-ascii" aria-hidden="true">
+  ╔══════════════════════╗
+  ║   RETO  COMPLETADO   ║
+  ║   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
+  ║   ★ ACHIEVEMENT ★   ║
+  ║   UNLOCKED!          ║
+  ╚══════════════════════╝</pre>
+    <button
+      id="celebration-close"
+      class="pixel-btn btn-green"
+      style="margin-top:16px;"
+      aria-label="Cerrar celebración"
+    >
+      ▶ CONTINUAR
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TOAST NOTIFICATIONS                                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MAIN APP                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div id="app">
+
+    <!-- ── Header ── -->
+    <header class="site-header">
+      <pre class="logo-sprite" aria-hidden="true">
+▄████████ ████████▄   ████████▄   ▄█    █▄     ▄████████
+███    ███ ███   ▀███  ███   ▀███ ███    ███   ███    ███
+███    ███ ███    ███  ███    ███ ███    ███   ███    █▀
+███    ███ ███    ███  ███    ███ ███    ███   ███
+▀███████████ ███    ███  ███    ███ ███    ███ ▀███████████
+███    ███ ███    ███  ███    ███ ███    ███          ███
+███    ███ ███   ▄███  ███   ▄███ ███    ███    ▄█    ███
+███    █▀  ████████▀   ████████▀   ▀██████▀   ▄████████▀</pre>
+
+      <h1 class="site-title">30 DÍAS DE VIDEOJUEGOS</h1>
+      <p class="site-subtitle">— El reto gamer definitivo —</p>
+
+      <div class="header-user">
+        <span id="header-nickname" class="nickname-tag">JUGADOR: ---</span>
+        <span id="header-stats" class="header-stats">0/30 días completados</span>
+      </div>
+    </header>
+
+    <!-- ── Nav Tabs ── -->
+    <nav class="nav-tabs" role="tablist" aria-label="Secciones">
+      <button
+        class="nav-tab"
+        data-tab="days"
+        role="tab"
+        aria-selected="true"
+        id="tab-days"
+      >
+        <span class="tab-icon">🎮</span> MIS DÍAS
+      </button>
+      <button
+        class="nav-tab"
+        data-tab="wall"
+        role="tab"
+        aria-selected="false"
+        id="tab-wall"
+      >
+        <span class="tab-icon">🌐</span> MURO COMUNITARIO
+      </button>
+      <button
+        class="nav-tab"
+        data-tab="info"
+        role="tab"
+        aria-selected="false"
+        id="tab-info"
+      >
+        <span class="tab-icon">⚙️</span> CONFIGURACIÓN
+      </button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- VIEW: MIS DÍAS                                         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section id="view-days" class="view active" role="tabpanel" aria-labelledby="tab-days">
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">▶ PROGRESO DEL RETO</span>
+          <span class="progress-count" id="progress-completed">0/30</span>
+        </div>
+        <div class="progress-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" aria-label="Días completados">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Days grid -->
+      <div class="days-grid" id="days-grid" aria-label="Tarjetas de los 30 días">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- VIEW: MURO COMUNITARIO                                 -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section id="view-wall" class="view" role="tabpanel" aria-labelledby="tab-wall">
+      <div class="wall-header">
+        <h2 class="wall-title">🌐 MURO COMUNITARIO</h2>
+        <p class="wall-subtitle">Todas las respuestas de todos los jugadores</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="wall-filters" id="wall-filters" role="group" aria-label="Filtrar por día">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Wall content -->
+      <div id="wall-content" aria-live="polite">
+        <div class="wall-loading">Selecciona la pestaña para cargar las respuestas ⚡</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- VIEW: CONFIGURACIÓN / INFO                             -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section id="view-info" class="view" role="tabpanel" aria-labelledby="tab-info">
+
+      <div class="env-notice">
+        <div class="env-notice-title">⚙️ VARIABLES DE ENTORNO NECESARIAS</div>
+        <ul class="env-list">
+          <li><code>IGDB_CLIENT_ID</code> — Client ID de Twitch Developer Console</li>
+          <li><code>IGDB_CLIENT_SECRET</code> — Client Secret de Twitch</li>
+          <li><code>SUPABASE_URL</code> — URL de tu proyecto Supabase</li>
+          <li><code>SUPABASE_ANON_KEY</code> — Anon/public key de Supabase</li>
+        </ul>
+      </div>
+
+      <div class="env-notice" style="border-color:var(--blue-neon);">
+        <div class="env-notice-title" style="color:var(--blue-neon);">📦 SQL — CREAR TABLAS EN SUPABASE</div>
+        <p style="font-family:var(--font-vt);font-size:18px;color:var(--text-dim);margin-bottom:12px;">
+          Ejecuta el siguiente SQL en el editor de Supabase (SQL Editor):
+        </p>
+        <pre style="
+          background:var(--bg-deep);
+          border:1px dashed var(--blue-neon);
+          padding:16px;
+          font-family:monospace;
+          font-size:12px;
+          color:var(--green-neon);
+          overflow-x:auto;
+          line-height:1.6;
+          white-space:pre-wrap;
+          word-break:break-word;
+        ">-- ═══════════════════════════════════════════════
+-- Tabla: users
+-- ═══════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.users (
+  id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  nickname    TEXT NOT NULL UNIQUE,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Index for fast lookup by nickname
+CREATE INDEX IF NOT EXISTS idx_users_nickname ON public.users(nickname);
+
+-- Row Level Security: anyone can read users, insert their own
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can read users"
+  ON public.users FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can insert user"
+  ON public.users FOR INSERT WITH CHECK (true);
+
+-- ═══════════════════════════════════════════════
+-- Tabla: responses
+-- ═══════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.responses (
+  id             UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_nickname  TEXT NOT NULL REFERENCES public.users(nickname) ON DELETE CASCADE,
+  day_number     INTEGER NOT NULL CHECK (day_number BETWEEN 1 AND 30),
+  game_id        INTEGER,
+  game_name      TEXT,
+  game_cover     TEXT,
+  character_name TEXT,
+  text_response  TEXT,
+  created_at     TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (user_nickname, day_number)
+);
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_responses_day    ON public.responses(day_number);
+CREATE INDEX IF NOT EXISTS idx_responses_user   ON public.responses(user_nickname);
+
+-- RLS: anyone can read, users can upsert their own
+ALTER TABLE public.responses ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can read responses"
+  ON public.responses FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can insert response"
+  ON public.responses FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Anyone can update response"
+  ON public.responses FOR UPDATE USING (true);</pre>
+      </div>
+
+      <div class="env-notice" style="border-color:var(--purple-neon);">
+        <div class="env-notice-title" style="color:var(--purple-neon);">🚀 ESTRUCTURA DE ARCHIVOS</div>
+        <pre style="
+          background:var(--bg-deep);
+          border:1px dashed var(--purple-mid);
+          padding:16px;
+          font-family:monospace;
+          font-size:13px;
+          color:var(--text-primary);
+          line-height:1.8;
+        ">30days/
+├── index.html          ← Página principal
+├── style.css           ← Estilos retro / pixel art
+├── app.js              ← Lógica de la aplicación
+├── vercel.json         ← Configuración Vercel
+└── api/
+    └── igdb.js         ← Proxy serverless para IGDB API</pre>
+      </div>
+
+      <div class="env-notice" style="border-color:var(--green-neon);">
+        <div class="env-notice-title" style="color:var(--green-neon);">📋 PASOS PARA DESPLEGAR EN VERCEL</div>
+        <ol style="font-family:var(--font-vt);font-size:19px;color:var(--text-primary);line-height:2;padding-left:20px;">
+          <li>Crea una cuenta en <strong style="color:var(--green-neon)">vercel.com</strong></li>
+          <li>Importa este repositorio desde GitHub</li>
+          <li>En <em>Settings → Environment Variables</em>, añade las 4 variables de entorno</li>
+          <li>En el archivo <code style="color:var(--green-neon)">index.html</code>, rellena también <code>window.ENV_SUPABASE_URL</code> y <code>window.ENV_SUPABASE_ANON_KEY</code> (son claves públicas, es seguro)</li>
+          <li>Despliega → ¡listo!</li>
+        </ol>
+      </div>
+
+      <!-- Reset button -->
+      <div style="margin-top:32px;text-align:center;">
+        <button
+          class="pixel-btn btn-primary"
+          onclick="if(confirm('¿Seguro? Esto borrará tu progreso local.')) { localStorage.clear(); location.reload(); }"
+          style="font-size:7px;"
+          aria-label="Resetear datos locales"
+        >
+          🗑️ RESETEAR DATOS LOCALES
+        </button>
+      </div>
+
+    </section>
+
+  </div><!-- /#app -->
+
+  <script src="app.js"></script>
+</body>
+</html>
